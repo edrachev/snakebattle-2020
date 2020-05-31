@@ -23,7 +23,7 @@ public class Board {
 
 
         BoardPoint snakeHead = gameBoard.getMyHead();
-        if(snakeHead == null) {
+        if (snakeHead == null) {
             // wtf
             snakeHead = new BoardPoint(1, 1);
         }
@@ -63,6 +63,14 @@ public class Board {
             case ENEMY_BODY_RIGHT_DOWN:
             case ENEMY_BODY_RIGHT_UP:
                 return ElementType.ENEMY_SNAKE;
+
+            case BODY_HORIZONTAL:
+            case BODY_VERTICAL:
+            case BODY_LEFT_DOWN:
+            case BODY_LEFT_UP:
+            case BODY_RIGHT_DOWN:
+            case BODY_RIGHT_UP:
+                return ElementType.SELF_SNAKE;
         }
 
         return ElementType.UNKNOWN;
