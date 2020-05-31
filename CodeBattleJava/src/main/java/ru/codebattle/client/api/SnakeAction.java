@@ -7,6 +7,12 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @Getter
 public class SnakeAction {
+
+  public static SnakeAction forDirection(Direction direction) {
+    var action = new SnakeAction(false, direction);
+    return action;
+  }
+
   private static final String ACT_COMMAND_PREFIX = "ACT,";
 
   private final boolean act;
