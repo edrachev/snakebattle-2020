@@ -16,6 +16,7 @@ public class Board {
     }
 
     private final Snake snake;
+    private final Snake previousSnake;
 
     private final ElementType[][] elements;
 
@@ -50,6 +51,8 @@ public class Board {
 
         snake = new Snake(Point.forBoardPoint(snakeHead), defineSnakeDirection(element), rageTicks);
         previousDirection = snake.getDirection();
+
+        previousSnake = null;
     }
 
     private ElementType map(BoardElement element) {
@@ -96,9 +99,10 @@ public class Board {
         return ElementType.UNKNOWN;
     }
 
-    private Board(Snake snake, ElementType[][] elements) {
+    private Board(Snake snake, ElementType[][] elements, Snake previousSnake) {
         this.snake = snake;
         this.elements = elements;
+        this.previousSnake = previousSnake;
     }
 
     private Direction defineSnakeDirection(BoardElement element) {
@@ -130,10 +134,14 @@ public class Board {
         boolean willBeRaged = getElement(newPosition) == ElementType.RAGE;
         if(willBeRaged) rageTicks += 10;
         Snake newSnake = new Snake(newPosition, snakeDirection, rageTicks);
-        return new Board(newSnake, elements);
+        return new Board(newSnake, elements, snake);
     }
 
     public ElementType[][] getElements() {
         return elements;
+    }
+
+    public Snake getPreviousSnake() {
+        return previousSnake;
     }
 }
