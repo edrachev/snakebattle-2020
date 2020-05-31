@@ -48,7 +48,7 @@ public class GameDecisionFinder {
             Game newGame = game.move(direction);
             double value = calculator.evaluate(newGame) * decreasingLevelRate;
 
-            if(levels > 0 && value > -25) {
+            if(levels > 0 && value >= 0) {
                 Result nextLevelResult = calcualte(newGame, nextLevels, nextLeveDecreasingLevelRate);
                 value += nextLevelResult.getBestValue();
             }
