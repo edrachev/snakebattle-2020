@@ -20,12 +20,21 @@ public class SmartStrategy implements Function<GameBoard, SnakeAction>  {
             Direction snakeDirection = game.getBoard().getSnake().getDirection();
             Direction newDirection = bestMovement.transform(snakeDirection);
             Board.previousDirection = newDirection;
+            processRageTicks(game, bestMovement);
             long time = System.currentTimeMillis() - startTime;
             System.out.println("took " + time);
             return SnakeAction.forDirection(newDirection);
         } catch (Exception e) {
             e.printStackTrace();
             return SnakeAction.forDirection(Direction.RIGHT);
+        }
+    }
+
+    private void processRageTicks(Game game, MoveDirection bestMovement) {
+        Board.decreaseRageTicks();
+        Game newGame = game.move(bestMovement);
+        if(newGame.getSnakePositionElementType() == ElementType.RAGE) {
+            Board.increaseRageTicks();
         }
     }
 

@@ -8,10 +8,10 @@ import ru.codebattle.client.api.GameBoard;
 public class Board {
     public static Direction previousDirection = Direction.RIGHT;
     public static int rageTicks = 0;
-    private static void increaseRageTicks() {
+    public static void increaseRageTicks() {
         rageTicks += 10;
     }
-    private static void decreaseRageTicks() {
+    public static void decreaseRageTicks() {
         if(rageTicks > 0) rageTicks--;
     }
 
@@ -38,11 +38,16 @@ public class Board {
             snakeHead = new BoardPoint(1, 1);
         }
 
-        decreaseRageTicks();
         BoardElement element = gameBoard.getElementAt(snakeHead);
-        if(element == BoardElement.HEAD_EVIL) {
-            increaseRageTicks();
+
+        if(element == BoardElement.HEAD_EVIL && rageTicks == 0) {
+            rageTicks = 1;
         }
+
+        if(element != BoardElement.HEAD_EVIL) {
+            rageTicks = 0;
+        }
+
         snake = new Snake(Point.forBoardPoint(snakeHead), defineSnakeDirection(element), rageTicks);
         previousDirection = snake.getDirection();
     }
