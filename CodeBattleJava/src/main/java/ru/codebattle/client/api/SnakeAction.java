@@ -9,7 +9,7 @@ import lombok.ToString;
 public class SnakeAction {
 
   public static SnakeAction forDirection(Direction direction) {
-    var action = new SnakeAction(false, direction);
+    var action = new SnakeAction(true, direction);
     return action;
   }
 
@@ -20,7 +20,6 @@ public class SnakeAction {
 
   @Override
   public String toString() {
-    var cmd = act ? ACT_COMMAND_PREFIX : "";
-    return cmd + direction.toString();
+    return direction.toString() + ",ACT";
   }
 }
