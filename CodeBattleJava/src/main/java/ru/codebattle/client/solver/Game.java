@@ -25,4 +25,26 @@ public class Game {
     }
 
 
+    public int distanceToClosestUseful() {
+        Point point = board.getSnake().getPoint();
+        int snakeX = point.getX();
+        int snakeY = point.getY();
+
+        int closestDistance = Integer.MAX_VALUE;
+
+        ElementType[][] elements = board.getElements();
+        for(int x = 0; x < elements.length; x++) {
+            for(int y = 0; y < elements.length; y++) {
+                ElementType element = elements[x][y];
+                if(element == ElementType.APPLE || element == ElementType.GOLD) {
+                    int distance = Math.abs(x - snakeX) + Math.abs(y - snakeY);
+                    if(distance < closestDistance) {
+                        closestDistance = distance;
+                    }
+                }
+            }
+        }
+
+        return closestDistance;
+    }
 }

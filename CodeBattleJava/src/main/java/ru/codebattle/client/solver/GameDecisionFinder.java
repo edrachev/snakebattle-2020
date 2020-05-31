@@ -4,30 +4,32 @@ import ru.codebattle.client.api.Direction;
 import ru.codebattle.client.api.SnakeAction;
 import ru.codebattle.client.solver.aspect.Constants;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GameDecisionFinder {
     private GameEstimateCalculator calculator = new GameEstimateCalculator();
     public static class Result {
         private final Map<MoveDirection, Double> directions = new LinkedHashMap<>();
 
-        MoveDirection getBestDirection() {
+        List<MoveDirection> getBestDirections() {
+            List<MoveDirection> bestDirections = new ArrayList<>();
             double maxValue = -Double.MAX_VALUE;
-            MoveDirection maxDirection = MoveDirection.RIGHT;
             for(Map.Entry<MoveDirection, Double> entry: directions.entrySet()) {
                 if(entry.getValue() > maxValue) {
-                    maxDirection = entry.getKey();
+                    bestDirections = new ArrayList<>();
+                    bestDirections.add(entry.getKey());
                     maxValue = entry.getValue();
+                } else if (entry.getValue() == maxValue) {
+                    bestDirections.add(entry.getKey());
                 }
             }
 
-            return maxDirection;
+            return bestDirections;
         }
 
         double getBestValue() {
-            return directions.get(getBestDirection());
+            if(getBestDirections().isEmpty()) return -Double.MAX_VALUE;
+            return directions.get(getBestDirections().get(0));
         }
 
         public void addDirection(MoveDirection direction, double value) {
@@ -35,9 +37,9 @@ public class GameDecisionFinder {
         }
     }
 
-    public MoveDirection findBestDirection(Game game) {
+    public List<MoveDirection> findBestDirections(Game game) {
         Result result = calcualte(game, Constants.LEVELS, 1.0);
-        return result.getBestDirection();
+        return result.getBestDirections();
     }
 
     private Result calcualte(Game game, int levels, double decreasingLevelRate) {

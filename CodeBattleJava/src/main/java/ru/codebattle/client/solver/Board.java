@@ -111,4 +111,8 @@ public class Board {
         Snake newSnake = new Snake(newPosition, snakeDirection, snake.isInRage() || willBeRaged);
         return new Board(newSnake, elements);
     }
+
+    public ElementType[][] getElements() {
+        return elements;
+    }
 }
