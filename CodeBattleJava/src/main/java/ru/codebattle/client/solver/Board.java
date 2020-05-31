@@ -6,9 +6,19 @@ import ru.codebattle.client.api.Direction;
 import ru.codebattle.client.api.GameBoard;
 
 public class Board {
+    public static Direction previousDirection = Direction.RIGHT;
+    public static int rageTicks = 0;
+    private static void increaseRageTicks() {
+        rageTicks += 10;
+    }
+    private static void decreaseRageTicks() {
+        if(rageTicks > 0) rageTicks--;
+    }
+
     private final Snake snake;
 
     private final ElementType[][] elements;
+
 
     public Board(GameBoard gameBoard) {
         var size = gameBoard.size();
@@ -27,8 +37,13 @@ public class Board {
             // wtf
             snakeHead = new BoardPoint(1, 1);
         }
+
+        decreaseRageTicks();
         BoardElement element = gameBoard.getElementAt(snakeHead);
-        snake = new Snake(Point.forBoardPoint(snakeHead), defineSnakeDirection(element), element == BoardElement.HEAD_EVIL);
+        if(element == BoardElement.HEAD_EVIL) {
+            increaseRageTicks();
+        }
+        snake = new Snake(Point.forBoardPoint(snakeHead), defineSnakeDirection(element), rageTicks);
         previousDirection = snake.getDirection();
     }
 
@@ -81,8 +96,6 @@ public class Board {
         this.elements = elements;
     }
 
-    public static Direction previousDirection = Direction.RIGHT;
-
     private Direction defineSnakeDirection(BoardElement element) {
         if (element == BoardElement.HEAD_DOWN) return Direction.DOWN;
         if (element == BoardElement.HEAD_RIGHT) return Direction.RIGHT;
@@ -107,8 +120,11 @@ public class Board {
     public Board move(MoveDirection moveDirection) {
         Direction snakeDirection = moveDirection.transform(snake.getDirection());
         Point newPosition = snake.getPoint().shift(snakeDirection);
+        int rageTicks = snake.getRageTicks();
+        if(rageTicks > 0) rageTicks--;
         boolean willBeRaged = getElement(newPosition) == ElementType.RAGE;
-        Snake newSnake = new Snake(newPosition, snakeDirection, snake.isInRage() || willBeRaged);
+        if(willBeRaged) rageTicks += 10;
+        Snake newSnake = new Snake(newPosition, snakeDirection, rageTicks);
         return new Board(newSnake, elements);
     }
 

@@ -6,12 +6,12 @@ import ru.codebattle.client.api.GameBoard;
 public class Snake {
     private final Point point;
     private final Direction direction;
-    private final boolean inRage;
+    private final int rageTicks;
 
-    public Snake(Point point, Direction direction, boolean inRage) {
+    public Snake(Point point, Direction direction, int rageTicks) {
         this.point = point;
         this.direction = direction;
-        this.inRage = inRage;
+        this.rageTicks = rageTicks;
     }
 
     public Point getPoint() {
@@ -23,6 +23,10 @@ public class Snake {
     }
 
     public boolean isInRage() {
-        return inRage;
+        return rageTicks > 0;
+    }
+
+    public int getRageTicks() {
+        return rageTicks;
     }
 }
